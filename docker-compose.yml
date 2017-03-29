@@ -1,0 +1,17 @@
+version: '2'
+services:
+    data:
+        image: silintl/data-volume:latest
+        volumes:
+            - ./:/data
+            - ./auth.json:/root/.composer/auth.json
+        user: "${DOCKER_UIDGID}"
+
+    cli:
+        image: silintl/php7:latest
+        volumes_from:
+            - data
+        working_dir: /data
+#        env_file:
+#            - ./local.env
+        command: ["true"]
