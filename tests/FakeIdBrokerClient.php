@@ -10,8 +10,6 @@ namespace Sil\IdpPw\PasswordStore\IdBroker\tests;
 
 /**
  * Description of FakeIdBroker
- *
- * @author vail
  */
 class FakeIdBrokerClient {
     private $users;
@@ -28,5 +26,10 @@ class FakeIdBrokerClient {
             return $this->users[$employeeId] ?? null;
         }
         return null;
+    }
+    
+    public function setPassword($arrayOfUserInfo)
+    {
+        return $this->getUser($arrayOfUserInfo);
     }
 }

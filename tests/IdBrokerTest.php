@@ -19,9 +19,7 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
     protected function getIdBrokerForTest($listOfUserData)
     {
         $fakeIdBrokerClient = new FakeIdBrokerClient($listOfUserData);
-        $idBrokerForTest = Phake::mock(IdBroker::class);
-        Phake::when($idBrokerForTest)->getMeta->thenCallParent();
-        Phake::when($idBrokerForTest)->set->thenCallParent();
+        $idBrokerForTest = Phake::partialMock(IdBroker::class);
         Phake::when($idBrokerForTest)->getClient()->thenReturn($fakeIdBrokerClient);
         return $idBrokerForTest;
     }
@@ -44,73 +42,77 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMetaUserNotFound()
     {
-        $idbroker = $this->getIdBrokerForTest([]);
+        $idbroker = $this->getIdBrokerForTest([
+            '10161' => [
+                'locked' => 'no',
+                'password_expires' => time(),
+                'password_last_changed' => time()
+            ]
+        ]);
         
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException');
         
-        $idbroker->getMeta('doesntexist');
+        $idbroker->getMeta('badUserId');
     }
 
     public function testGetMetaAccountLocked()
     {
-        $idbroker = $this->getClient();
+        $idbroker = $this->getIdBrokerForTest([
+            '10161' => [
+                'locked' => 'yes',
+                'password_expires' => time(),
+                'password_last_changed' => time()
+            ]
+        ]);
 
-//        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException', '', 1463493653);
-//        $idbroker->getMeta('doesntexist');
-    }
+        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
+        
+        $userMeta = $idbroker->getMeta('10161');
+        }
 
     public function testSetOk()
     {
-        $idbroker = $this->getClient();
+        $idbroker = $this->getIdBrokerForTest([
+            '10161' => [
+                'locked' => 'no',
+                'password_expires' => time(),
+                'password_last_changed' => time()
+            ]
+        ]);
 
-//        $userMeta = $idbroker->set('10161', 'testpass');
-//        $this->assertInstanceOf('\Sil\IdpPw\Common\PasswordStore\UserPasswordMeta', $userMeta);
+        $userMeta = $idbroker->set('10161', 'newPassword');
+        
+        $this->assertInstanceOf(UserPasswordMeta::class, $userMeta);
+        $this->assertNotNull($userMeta->passwordExpireDate);
     }
 
     public function testSetUserNotFound()
     {
-        $idbroker = $this->getClient();
+        $idbroker = $this->getIdBrokerForTest([
+            '10161' => [
+                'locked' => 'no',
+                'password_expires' => time(),
+                'password_last_changed' => time()
+            ]
+        ]);
 
-//        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException', '', 1463493653);
-//        $idbroker->getMeta('doesntexist');
+        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException');
+        
+        $idbroker->set('badUserId', 'newPassword');
     }
 
     public function testSetAccountLocked()
     {
-        $idbroker = $this->getClient();
+        $idbroker = $this->getIdBrokerForTest([
+            '10161' => [
+                'locked' => 'yes',
+                'password_expires' => time(),
+                'password_last_changed' => time()
+            ]
+        ]);
 
-//        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException', '', 1472740480);
-//        $userMeta = $idbroker->getMeta('10121');
-    }
-
-    /**
-     * @return idbroker client
-     */
-    public function getClient()
-    {
-        $idbroker = new IdBroker();
+        $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
         
-//        $idbroker->host = '127.0.0.1';
-//        $idbroker->port = 389;
-//        $idbroker->baseDn = 'ou=gis_affiliated_person,dc=acme,dc=org';
-//        $idbroker->adminUsername = 'cn=Manager,dc=acme,dc=org';
-//        $idbroker->adminPassword = 'admin';
-//        $idbroker->useTls = true;
-//        $idbroker->useSsl = false;
-//        $idbroker->employeeIdAttribute = 'gisEisPersonId';
-//        $idbroker->passwordLastChangeDateAttribute = 'pwdchangedtime';
-//        $idbroker->passwordExpireDateAttribute = 'modifytimestamp';
-//        $idbroker->userPasswordAttribute = 'userPassword';
-//        $idbroker->removeAttributesOnSetPassword = [
-//            'pwdpolicysubentry',
-//            'pwdaccountlockedtime',
-//        ];
-//        $idbroker->updateAttributesOnSetPassword = [
-//            'gisusaeventpwdchange' => 'Yes'
-//        ];
-//        $idbroker->userAccountDisabledAttribute = 'pwdaccountlockedtime';
-//        $idbroker->userAccountDisabledValue = '000001010000Z';
-        
-        return $idbroker;
+        $idbroker->set('10161', 'newPassword');
     }
 }
