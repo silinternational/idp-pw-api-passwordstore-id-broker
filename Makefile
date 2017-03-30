@@ -12,3 +12,7 @@ depsupdate:
 
 test: deps
 	docker-compose run --rm cli vendor/bin/phpunit --report-useless-tests tests
+
+codeship: 
+	composer install --no-scripts
+	./vendor/bin/phpunit --report-useless-tests tests

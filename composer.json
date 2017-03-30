@@ -11,9 +11,9 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=7.0.0",
-    "silinternational/idp-pw-api-common": "dev-master",
+    "silinternational/idp-pw-api-common": "^1.0",
     "silinternational/idp-id-broker-php-client": "^0.2.1",
-    "fillup/fake-bower-assets": "2.0.9"
+    "fillup/fake-bower-assets": "^2.0.9"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.0",
