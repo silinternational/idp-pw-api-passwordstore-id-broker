@@ -3,4 +3,4 @@ test:
   volumes:
     - ./:/data
   working_dir: /data
-  command: make codeship
+  command: ./codeship-test.sh
