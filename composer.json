@@ -1,0 +1,28 @@
+{
+  "name": "silinternational/idp-pw-api-passwordstore-id-broker",
+  "description": "Id Broker Password Store component for IdP PW API",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Phillip Shipley",
+      "email": "phillip_shipley@sil.org"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.0.0",
+    "silinternational/idp-pw-api-common": "dev-master",
+    "silinternational/idp-id-broker-php-client": "^0.2.1",
+    "fillup/fake-bower-assets": "2.0.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.0",
+    "phake/phake": "^2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sil\\IdpPw\\PasswordStore\\IdBroker\\": "src/",
+      "Sil\\IdpPw\\PasswordStore\\IdBroker\\tests\\": "tests/"
+    }
+  }
+}
