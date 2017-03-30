@@ -16,7 +16,7 @@
     "fillup/fake-bower-assets": "^2.0.9"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.0",
+    "phpunit/phpunit": "^5.0",
     "phake/phake": "^2.3"
   },
   "autoload": {
