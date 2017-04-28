@@ -33,9 +33,7 @@ class IdBroker extends Component implements PasswordStoreInterface
         try {        
             $client = $this->getClient();
 
-            $user = $client->getUser([
-                'employee_id' => $employeeId
-            ]);
+            $user = $client->getUser($employeeId);
             
             if ($user === null) {
                 throw new UserNotFoundException();
@@ -69,9 +67,7 @@ class IdBroker extends Component implements PasswordStoreInterface
         try {        
             $client = $this->getClient();
 
-            $user = $client->getUser([
-                'employee_id' => $employeeId
-            ]);
+            $user = $client->getUser($employeeId);
             
             if ($user === null) {
                 throw new UserNotFoundException();
@@ -81,10 +77,7 @@ class IdBroker extends Component implements PasswordStoreInterface
                 throw new AccountLockedException();
             }
             
-            $update = $client->setPassword([
-                'employee_id' => $employeeId,
-                'password' => $password
-            ]);
+            $update = $client->setPassword($employeeId, $password);
             
             $meta = UserPasswordMeta::create(
                     $update['password_expires'], 
