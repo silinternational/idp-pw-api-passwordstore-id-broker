@@ -15,7 +15,7 @@ class IdBroker extends Component implements PasswordStoreInterface
      * @var string base Url for the API
      */
     public $baseUrl;
-    
+
     /**
      * @var string access Token for the API
      */
@@ -30,22 +30,22 @@ class IdBroker extends Component implements PasswordStoreInterface
      */
     public function getMeta($employeeId)
     {
-        try {        
+        try {
             $client = $this->getClient();
 
             $user = $client->getUser($employeeId);
-            
+
             if ($user === null) {
                 throw new UserNotFoundException();
             }
-            
+
             if ($user['locked'] == 'yes') {
                 throw new AccountLockedException();
             }
-            
+
             $meta = UserPasswordMeta::create(
-                    $user['password_expires'], 
-                    $user['password_last_changed']
+                    $user['password_expires_at_utc'] ?? null,
+                    $user['password_last_changed'] ?? null
             );
             return $meta;
         } catch (\Exception $e) {
@@ -64,32 +64,32 @@ class IdBroker extends Component implements PasswordStoreInterface
      */
     public function set($employeeId, $password)
     {
-        try {        
+        try {
             $client = $this->getClient();
 
             $user = $client->getUser($employeeId);
-            
+
             if ($user === null) {
                 throw new UserNotFoundException();
             }
-            
+
             if ($user['locked'] == 'yes') {
                 throw new AccountLockedException();
             }
-            
+
             $update = $client->setPassword($employeeId, $password);
-            
+
             $meta = UserPasswordMeta::create(
-                    $update['password_expires'], 
-                    $update['password_last_changed']
+                    $update['password_expires_at_utc'] ?? null,
+                    $update['password_last_changed'] ?? null
             );
             return $meta;
         } catch (\Exception $e) {
             throw $e;
         }
     }
-    
-    public function getClient() 
+
+    public function getClient()
     {
         return new IdBrokerClient($this->baseUrl, $this->accessToken);
     }
