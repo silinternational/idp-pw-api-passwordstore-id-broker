@@ -44,8 +44,8 @@ class IdBroker extends Component implements PasswordStoreInterface
             }
             
             $meta = UserPasswordMeta::create(
-                    $user['password_expires_at_utc'] ?? null,
-                    $user['password_last_changed'] ?? null
+                $user['password']['expiration_utc'] ?? null,
+                $user['password']['created_utc'] ?? null
             );
             return $meta;
         } catch (\Exception $e) {
@@ -80,8 +80,8 @@ class IdBroker extends Component implements PasswordStoreInterface
             $update = $client->setPassword($employeeId, $password);
             
             $meta = UserPasswordMeta::create(
-                    $update['password_expires_at_utc'] ?? null,
-                    $update['password_last_changed'] ?? null
+                $update['password']['expiration_utc'] ?? null,
+                $update['password']['created_utc'] ?? null
             );
             return $meta;
         } catch (\Exception $e) {

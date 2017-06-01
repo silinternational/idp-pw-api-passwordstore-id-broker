@@ -10,17 +10,16 @@ class FakeIdBrokerClient
         $this->users = $users;
     }
     
-    public function getUser($userInfo)
+    public function getUser($employeeId)
     {
-        $employeeId = $userInfo['employee_id'] ?? null;
         if ($employeeId !== null) {
             return $this->users[$employeeId] ?? null;
         }
         return null;
     }
     
-    public function setPassword($arrayOfUserInfo)
+    public function setPassword($employeeId, $password)
     {
-        return $this->getUser($arrayOfUserInfo);
+        return $this->getUser($employeeId);
     }
 }
