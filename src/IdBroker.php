@@ -4,7 +4,6 @@ namespace Sil\IdpPw\PasswordStore\IdBroker;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\IdpPw\Common\PasswordStore\AccountLockedException;
 use Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface;
-use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
 use Sil\IdpPw\Common\PasswordStore\UserNotFoundException;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use yii\base\Component;
@@ -24,7 +23,8 @@ class IdBroker extends Component implements PasswordStoreInterface
     /**
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
-     * @return \Sil\IdpPw\Common\PasswordStore\UserPasswordMeta
+     * @return UserPasswordMeta
+     * @throws \Exception
      * @throw \Sil\IdpPw\Common\PasswordStore\UserNotFoundException
      * @throw \Sil\IdpPw\Common\PasswordStore\AccountLockedException
      */
