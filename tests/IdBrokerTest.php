@@ -39,7 +39,7 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UserPasswordMeta::class, $userMeta);
         $this->assertNotNull($userMeta->passwordExpireDate);
     }
-
+    
     public function testGetMetaUserNotFound()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -54,7 +54,7 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
         
         $idbroker->getMeta('badUserId');
     }
-
+    
     public function testGetMetaAccountLocked()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -64,12 +64,12 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'password_last_changed' => time()
             ]
         ]);
-
+        
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
         
         $userMeta = $idbroker->getMeta('10161');
-        }
-
+    }
+    
     public function testSetOk()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -79,13 +79,13 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'password_last_changed' => time()
             ]
         ]);
-
+        
         $userMeta = $idbroker->set('10161', 'newPassword');
         
         $this->assertInstanceOf(UserPasswordMeta::class, $userMeta);
         $this->assertNotNull($userMeta->passwordExpireDate);
     }
-
+    
     public function testSetUserNotFound()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -95,12 +95,12 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'password_last_changed' => time()
             ]
         ]);
-
+        
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException');
         
         $idbroker->set('badUserId', 'newPassword');
     }
-
+    
     public function testSetAccountLocked()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -110,7 +110,7 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'password_last_changed' => time()
             ]
         ]);
-
+        
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
         
         $idbroker->set('10161', 'newPassword');

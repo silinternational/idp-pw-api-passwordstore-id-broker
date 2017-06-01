@@ -14,12 +14,12 @@ class IdBroker extends Component implements PasswordStoreInterface
      * @var string base Url for the API
      */
     public $baseUrl;
-
+    
     /**
      * @var string access Token for the API
      */
     public $accessToken;
-
+    
     /**
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
@@ -32,17 +32,17 @@ class IdBroker extends Component implements PasswordStoreInterface
     {
         try {
             $client = $this->getClient();
-
+            
             $user = $client->getUser($employeeId);
-
+            
             if ($user === null) {
                 throw new UserNotFoundException();
             }
-
+            
             if ($user['locked'] == 'yes') {
                 throw new AccountLockedException();
             }
-
+            
             $meta = UserPasswordMeta::create(
                     $user['password_expires_at_utc'] ?? null,
                     $user['password_last_changed'] ?? null
@@ -52,7 +52,7 @@ class IdBroker extends Component implements PasswordStoreInterface
             throw $e;
         }
     }
-
+    
     /**
      * Set user's password
      * @param string $employeeId
@@ -66,19 +66,19 @@ class IdBroker extends Component implements PasswordStoreInterface
     {
         try {
             $client = $this->getClient();
-
+            
             $user = $client->getUser($employeeId);
-
+            
             if ($user === null) {
                 throw new UserNotFoundException();
             }
-
+            
             if ($user['locked'] == 'yes') {
                 throw new AccountLockedException();
             }
-
+            
             $update = $client->setPassword($employeeId, $password);
-
+            
             $meta = UserPasswordMeta::create(
                     $update['password_expires_at_utc'] ?? null,
                     $update['password_last_changed'] ?? null
@@ -88,7 +88,7 @@ class IdBroker extends Component implements PasswordStoreInterface
             throw $e;
         }
     }
-
+    
     public function getClient()
     {
         return new IdBrokerClient($this->baseUrl, $this->accessToken);
