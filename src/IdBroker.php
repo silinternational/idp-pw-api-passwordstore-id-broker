@@ -4,7 +4,6 @@ namespace Sil\IdpPw\PasswordStore\IdBroker;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\IdpPw\Common\PasswordStore\AccountLockedException;
 use Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface;
-use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
 use Sil\IdpPw\Common\PasswordStore\UserNotFoundException;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use yii\base\Component;
@@ -15,16 +14,17 @@ class IdBroker extends Component implements PasswordStoreInterface
      * @var string base Url for the API
      */
     public $baseUrl;
-
+    
     /**
      * @var string access Token for the API
      */
     public $accessToken;
-
+    
     /**
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
-     * @return \Sil\IdpPw\Common\PasswordStore\UserPasswordMeta
+     * @return UserPasswordMeta
+     * @throws \Exception
      * @throw \Sil\IdpPw\Common\PasswordStore\UserNotFoundException
      * @throw \Sil\IdpPw\Common\PasswordStore\AccountLockedException
      */
@@ -32,27 +32,27 @@ class IdBroker extends Component implements PasswordStoreInterface
     {
         try {
             $client = $this->getClient();
-
+            
             $user = $client->getUser($employeeId);
-
+            
             if ($user === null) {
                 throw new UserNotFoundException();
             }
-
+            
             if ($user['locked'] == 'yes') {
                 throw new AccountLockedException();
             }
-
+            
             $meta = UserPasswordMeta::create(
-                    $user['password_expires_at_utc'] ?? null,
-                    $user['password_last_changed'] ?? null
+                $user['password']['expiration_utc'] ?? null,
+                $user['password']['created_utc'] ?? null
             );
             return $meta;
         } catch (\Exception $e) {
             throw $e;
         }
     }
-
+    
     /**
      * Set user's password
      * @param string $employeeId
@@ -66,29 +66,29 @@ class IdBroker extends Component implements PasswordStoreInterface
     {
         try {
             $client = $this->getClient();
-
+            
             $user = $client->getUser($employeeId);
-
+            
             if ($user === null) {
                 throw new UserNotFoundException();
             }
-
+            
             if ($user['locked'] == 'yes') {
                 throw new AccountLockedException();
             }
-
+            
             $update = $client->setPassword($employeeId, $password);
-
+            
             $meta = UserPasswordMeta::create(
-                    $update['password_expires_at_utc'] ?? null,
-                    $update['password_last_changed'] ?? null
+                $update['password']['expiration_utc'] ?? null,
+                $update['password']['created_utc'] ?? null
             );
             return $meta;
         } catch (\Exception $e) {
             throw $e;
         }
     }
-
+    
     public function getClient()
     {
         return new IdBrokerClient($this->baseUrl, $this->accessToken);
