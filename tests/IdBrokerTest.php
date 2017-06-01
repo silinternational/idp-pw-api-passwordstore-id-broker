@@ -1,8 +1,6 @@
 <?php
 namespace Sil\IdpPw\PasswordStore\IdBroker\tests;
 
-require __DIR__ . '/../vendor/autoload.php';
-
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
 use Sil\IdpPw\PasswordStore\IdBroker\IdBroker;
 use Phake;
