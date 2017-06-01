@@ -2,4 +2,4 @@ vendor/
 .idea/
 /nbproject/
 auth.json
-
+.vagrant/
