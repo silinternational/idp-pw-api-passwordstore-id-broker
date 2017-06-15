@@ -21,7 +21,7 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
         Phake::when($idBrokerForTest)->getClient()->thenReturn($fakeIdBrokerClient);
         return $idBrokerForTest;
     }
-    
+
     public function testGetMetaOk()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -29,18 +29,17 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'locked' => 'no',
                 'password' => [
                     'created_utc' => time(),
-                    'expiration_utc' => time(),
-                    'grace_period_ends_utc' => time(),
+                    'expires_on' => time(),
                 ],
             ],
         ]);
-        
+
         $userMeta = $idbroker->getMeta('10161');
-        
+
         $this->assertInstanceOf(UserPasswordMeta::class, $userMeta);
         $this->assertNotNull($userMeta->passwordExpireDate);
     }
-    
+
     public function testGetMetaUserNotFound()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -48,17 +47,16 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'locked' => 'no',
                 'password' => [
                     'created_utc' => time(),
-                    'expiration_utc' => time(),
-                    'grace_period_ends_utc' => time(),
+                    'expires_on' => time(),
                 ],
             ],
         ]);
-        
+
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException');
-        
+
         $idbroker->getMeta('badUserId');
     }
-    
+
     public function testGetMetaAccountLocked()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -66,17 +64,16 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'locked' => 'yes',
                 'password' => [
                     'created_utc' => time(),
-                    'expiration_utc' => time(),
-                    'grace_period_ends_utc' => time(),
+                    'expires_on' => time(),
                 ],
             ],
         ]);
-        
+
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
-        
+
         $userMeta = $idbroker->getMeta('10161');
     }
-    
+
     public function testSetOk()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -84,18 +81,17 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'locked' => 'no',
                 'password' => [
                     'created_utc' => time(),
-                    'expiration_utc' => time(),
-                    'grace_period_ends_utc' => time(),
+                    'expires_on' => time(),
                 ],
             ],
         ]);
-        
+
         $userMeta = $idbroker->set('10161', 'newPassword');
-        
+
         $this->assertInstanceOf(UserPasswordMeta::class, $userMeta);
         $this->assertNotNull($userMeta->passwordExpireDate);
     }
-    
+
     public function testSetUserNotFound()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -103,17 +99,16 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'locked' => 'no',
                 'password' => [
                     'created_utc' => time(),
-                    'expiration_utc' => time(),
-                    'grace_period_ends_utc' => time(),
+                    'expires_on' => time(),
                 ],
             ],
         ]);
-        
+
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\UserNotFoundException');
-        
+
         $idbroker->set('badUserId', 'newPassword');
     }
-    
+
     public function testSetAccountLocked()
     {
         $idbroker = $this->getIdBrokerForTest([
@@ -121,14 +116,13 @@ class IdBrokerTest extends \PHPUnit_Framework_TestCase
                 'locked' => 'yes',
                 'password' => [
                     'created_utc' => time(),
-                    'expiration_utc' => time(),
-                    'grace_period_ends_utc' => time(),
+                    'expires_on' => time(),
                 ],
             ],
         ]);
-        
+
         $this->setExpectedException('\Sil\IdpPw\Common\PasswordStore\AccountLockedException');
-        
+
         $idbroker->set('10161', 'newPassword');
     }
 }
