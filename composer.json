@@ -12,7 +12,7 @@
   "require": {
     "php": ">=7.0.0",
     "silinternational/idp-pw-api-common": "^1.0",
-    "silinternational/idp-id-broker-php-client": "^1.0",
+    "silinternational/idp-id-broker-php-client": "^1.0 || dev-feature/s2v",
     "fillup/fake-bower-assets": "^2.0.9"
   },
   "require-dev": {
