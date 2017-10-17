@@ -29,7 +29,7 @@ class IdBroker extends Component implements PasswordStoreInterface
     /**
      * @var IPBlock[]
      */
-    public $trustedIpRanges = [];
+    public $validIpRanges = [];
 
 
     
@@ -105,7 +105,7 @@ class IdBroker extends Component implements PasswordStoreInterface
     public function getClient()
     {
         return new IdBrokerClient($this->baseUrl, $this->accessToken, [
-            IdBrokerClient::TRUSTED_IPS_CONFIG => $this->trustedIpRanges,
+            IdBrokerClient::TRUSTED_IPS_CONFIG => $this->validIpRanges,
             IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
         ]);
     }
