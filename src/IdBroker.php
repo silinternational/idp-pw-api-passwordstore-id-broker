@@ -1,6 +1,7 @@
 <?php
 namespace Sil\IdpPw\PasswordStore\IdBroker;
 
+use IPBlock;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
 use Sil\IdpPw\Common\PasswordStore\AccountLockedException;
 use Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface;
@@ -20,6 +21,18 @@ class IdBroker extends Component implements PasswordStoreInterface
      */
     public $accessToken;
 
+    /**
+     * @var boolean
+     */
+    public $assertValidBrokerIp = true;
+
+    /**
+     * @var IPBlock[]
+     */
+    public $validIpRanges = [];
+
+
+    
     /**
      * Get metadata about user's password including last_changed_date and expires_date
      * @param string $employeeId
@@ -91,6 +104,9 @@ class IdBroker extends Component implements PasswordStoreInterface
 
     public function getClient()
     {
-        return new IdBrokerClient($this->baseUrl, $this->accessToken);
+        return new IdBrokerClient($this->baseUrl, $this->accessToken, [
+            IdBrokerClient::TRUSTED_IPS_CONFIG => $this->validIpRanges,
+            IdBrokerClient::ASSERT_VALID_BROKER_IP_CONFIG => $this->assertValidBrokerIp,
+        ]);
     }
 }
