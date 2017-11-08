@@ -13,7 +13,7 @@ This code is loaded in as a Yii2 Component in the main config file. Here is an e
         'baseUrl' => Env::requireEnv('ID_BROKER_BASE_URI'),
         'accessToken' => Env::requireEnv('ID_BROKER_ACCESS_TOKEN'),
         'assertValidBrokerIp' => true,
-        'trustedIpRanges' => ['10.0.01/16','127.0.0.1/32'],
+        'validIpRanges' => ['10.0.01/16','127.0.0.1/32'],
     ],
 ]
 ```
