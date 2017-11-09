@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "afceb47736d0ee89a5608a0e42a28685",
+    "content-hash": "4cc226ca0910c2b1b426886e79bb099e",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -732,16 +732,16 @@
         },
         {
             "name": "silinternational/idp-id-broker-php-client",
-            "version": "2.1.2",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/idp-id-broker-php-client.git",
-                "reference": "1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e"
+                "reference": "c17f03490f9ed31b812bce5b3b5c09f39ac963d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e",
-                "reference": "1ea2a8ac5f4fce7879bb0be62a77d853e614ed6e",
+                "url": "https://api.github.com/repos/silinternational/idp-id-broker-php-client/zipball/c17f03490f9ed31b812bce5b3b5c09f39ac963d7",
+                "reference": "c17f03490f9ed31b812bce5b3b5c09f39ac963d7",
                 "shasum": ""
             },
             "require": {
@@ -783,7 +783,7 @@
                 "idp",
                 "php client"
             ],
-            "time": "2017-10-23T20:23:06+00:00"
+            "time": "2017-11-09T16:01:26+00:00"
         },
         {
             "name": "silinternational/idp-pw-api-common",
