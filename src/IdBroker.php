@@ -3,7 +3,9 @@ namespace Sil\IdpPw\PasswordStore\IdBroker;
 
 use IPBlock;
 use Sil\Idp\IdBroker\Client\IdBrokerClient;
+use Sil\Idp\IdBroker\Client\ServiceException;
 use Sil\IdpPw\Common\PasswordStore\AccountLockedException;
+use Sil\IdpPw\Common\PasswordStore\PasswordReuseException;
 use Sil\IdpPw\Common\PasswordStore\PasswordStoreInterface;
 use Sil\IdpPw\Common\PasswordStore\UserNotFoundException;
 use Sil\IdpPw\Common\PasswordStore\UserPasswordMeta;
@@ -97,6 +99,11 @@ class IdBroker extends Component implements PasswordStoreInterface
                 $update['password']['created_utc'] ?? null
             );
             return $meta;
+        } catch (ServiceException $e) {
+            if ($e->httpStatusCode === 422) {
+                throw new PasswordReuseException();
+            }
+            throw $e;
         } catch (\Exception $e) {
             throw $e;
         }
